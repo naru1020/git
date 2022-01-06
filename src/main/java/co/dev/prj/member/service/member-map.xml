@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="co.dev.prj.member.service.MemberMapper">
+	<select id="memberSelectList"
+		resultType="co.dev.prj.member.service.MemberVO">
+		SELECT * FROM MEMBER
+	</select>
+
+	<select id="memberSelect"
+		parameterType="co.dev.prj.member.service.MemberVO"
+		resultType="co.dev.prj.member.service.MemberVO">
+		SELECT * FROM MEMBER WHERE ID = #{id}
+
+		<if test="password != null">
+			and password = #{password}
+		</if>
+
+	</select>
+	<insert id="memberInsert"
+		parameterType="co.dev.prj.member.service.MemberVO">
+		INSERT INTO MEMBER(ID, PASSWORD, NAME, TEL, ADDRESS,
+		PICTURE, PFILE)
+		VALUES (#{id}, #{password}, #{name}, #{tel},
+		#{address}, #{address}, #{picture}, #{pfile})
+	</insert>
+
+	<update id="memberUpdate"
+		parameterType="co.dev.prj.member.service.MemberVO">
+		UPDATE MEMBER
+		<if test="password != null"> SET PASSWORD = #{password}	</if>
+		<if test="name != null"> SET NAME = #{name}	</if>
+		<if test="tel != null"> SET TEL = #{tel}	</if>
+		<if test="address != null"> SET ADDRESS = #{password}	</if>
+		<if test="author != null"> SET AUTHOR = #{password}	</if>
+		<if test="picture != null"> SET PICTURE = #{picture}	</if>
+		<if test="pfile != null"> SET PFILE = #{pfile}	</if>
+		WHERE ID= #{id}
+	</update>
+
+	<delete id="memberDelete"
+		parameterType="co.dev.prj.member.service.MemberVO">
+		DELETE FROM MEMBER WHERE ID = #{id}
+	</delete>
+
+	<select id="isIdCheck"
+		parameterType="co.dev.prj.member.service.MemberVO"
+		resultType="boolean">
+		SELECT
+		CASE WHEN COUNT(*) = 1 THEN 0 ELSE 1 END AS ID
+		WHERE
+		ID = #{id}
+	</select>
+	
+	<select id="memberSearch" parameterType="String" resultType="co.dev.prj.member.service.MemberVO">
+		SELECT * FROM MEMBER
+		WHERE 
+		<if test="key == ''"> WHERE 1 = 1</if>
+		<if test="key == 'name'"> WHERE NAME LIKE '%'|| = #{data} ||'%'</if>
+		<if test="key == 'tel'"> WHERE TEL LIKE '%'|| = #{data} ||'%'</if>
+		<if test="key == 'address'"> WHERE ADDRESS LIKE '%'|| = #{data} ||'%'</if>
+	</select>
+</mapper>
